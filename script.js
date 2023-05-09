@@ -59,6 +59,31 @@ function addTransactionDOM(transaction){
     list.appendChild(item);
 }
 
+function updateValues(){
+    const amounts = transactions.map(transaction => transaction.amount);
+    const total = amounts.reduce((acc, item) => (acc+=item),0).toFixed(2);
+    const income = amounts.filter(item => item>0)
+        .reduce((acc,item) => (acc+=item),0)
+        .toFixed(2);
+    const expense = amounts.filter(item => item<0)
+        .reduce((acc,item) => ((acc+=item),0)*-1)
+        .toFixed(2);
+
+    balance.innerHTML = `$${total}`;
+    money_plus.innerHTML = `$${income}`;
+    money_minus.innerHTML = `$${expense}`;
+
+}
+
+function removeTransaction(id){
+    transactions = transactions.filter(transaction => transaction.id !== id);
+    updateLocalStorage();
+    init();
+}
+
+function updateLocalStorage(){
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
 
 function init(){
     list.innerHTML = '';
